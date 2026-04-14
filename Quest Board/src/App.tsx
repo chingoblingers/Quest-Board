@@ -23,6 +23,29 @@ async function fetchQuests(){
    
 }
 
+async function addQuest(){
+  try{
+
+    const {error} = await supabase.from("quests").insert([{
+    title: "Insert Quest Test",
+    description: "testing inserting a quest to the table",
+    status: "not started",
+    difficultly: "low",
+    user_id: "ed9e0f12-a41e-4fc6-9d10-e1c97c2d0f75"
+  }])
+  
+  if(error){
+    throw error
+  }
+
+  fetchQuests()
+
+  }catch (error){
+    console.error(`Could not create quest due to error ${error}`)
+  }
+
+}
+
 const mappedData = questsData.map(quest => {
   return <div key={quest.id}>
   <h2>{quest.title}</h2>
@@ -36,7 +59,7 @@ const mappedData = questsData.map(quest => {
     <>
     <h1> Hello </h1>
     {mappedData}
-    <button> Create Policy </button>
+    <button onClick={addQuest}> Add Quest </button>
     </>
     
   )
