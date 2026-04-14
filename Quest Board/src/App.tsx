@@ -1,8 +1,11 @@
 import {useEffect, useState} from "react"
 import {supabase}from "./lib/supabaseClient"
 
+type QuestStatus = "completed" | "in_progress" | "not_started" 
+type Quest = {id: string, title:string, user_id: string, description: string | null, status: QuestStatus | null, difficultly:string | null}
+
 export default function App() {
-const [questsData, setQuestsData] = useState<any[]>([])
+const [questsData, setQuestsData] = useState<Quest[]>([])
 
 useEffect(()=>{
   fetchQuests()
