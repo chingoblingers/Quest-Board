@@ -23,10 +23,20 @@ async function fetchQuests(){
    
 }
 
+const mappedData = questsData.map(quest => {
+  return <div key={quest.id}>
+  <h2>{quest.title}</h2>
+  <p>{quest.description}</p>
+  <p>{quest.status}</p>
+  <p>{quest.difficultly}</p>
+  </div>
+})
+
   return (
     <>
     <h1> Hello </h1>
-    <pre>{JSON.stringify(questsData, null, 2)}</pre>
+    {mappedData}
+    <button> Create Policy </button>
     </>
     
   )
