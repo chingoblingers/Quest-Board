@@ -46,7 +46,7 @@ async function addQuest(){
     throw error
   }
 
-  fetchQuests()
+  await fetchQuests()
 
   }catch (error){
     console.error(`Could not create quest due to error ${error}`)
@@ -54,9 +54,9 @@ async function addQuest(){
 
 }
 
-function handleSubmit(e: React.FormEvent<HTMLFormElement>){
+async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
   e.preventDefault()
-  addQuest()
+  await addQuest()
   setTitle('')
   setDescription('')
   setStatus("not_started")
@@ -71,8 +71,6 @@ const mappedData = questsData.map(quest => {
   <p>{quest.difficulty}</p>
   </div>
 })
-
-console.log(title)
 
   return (
     <>
