@@ -1,11 +1,16 @@
 import {useEffect, useState} from "react"
 import {supabase}from "./lib/supabaseClient"
 
-type QuestStatus = "completed" | "in_progress" | "not_started" 
-type Quest = {id: string, title:string, user_id: string, description: string | null, status: QuestStatus | null, difficultly:string | null}
+type QuestStatus = "completed" | "in_progress" | "not_started"
+type Difficultly = "low" | "medium" | 'high'
+type Quest = {id: string, title:string, user_id: string, description: string | null, status: QuestStatus | null, difficultly: Difficultly | null}
 
 export default function App() {
 const [questsData, setQuestsData] = useState<Quest[]>([])
+const [title, setTitle] = useState('')
+const [description, setDescription] = useState('')
+const [status, setStatus] = useState<QuestStatus | null>("not_started")
+const [difficultly, setDifficultly] = useState<Difficultly | null>('low')
 
 useEffect(()=>{
   fetchQuests()
@@ -50,7 +55,7 @@ async function addQuest(){
 }
 
 const mappedData = questsData.map(quest => {
-  return <div key={quest.id}>
+  return <div key={quest.id} className="quest">
   <h2>{quest.title}</h2>
   <p>{quest.description}</p>
   <p>{quest.status}</p>
@@ -58,11 +63,55 @@ const mappedData = questsData.map(quest => {
   </div>
 })
 
+console.log(title)
+
   return (
     <>
-    <h1> Hello </h1>
+    <div className="questContainer"> 
     {mappedData}
+    </div>
     <button onClick={addQuest}> Add Quest </button>
+    <form className="customQuestForm">
+<div className="formSection">  
+    <label htmlFor="questTitle">Quest title</label>  
+    <input type="text" onChange={(e)=> setTitle(e.target.value)} value={title} name="questTitle" placeholder="Slay a dragon..." id="questTitle" required/>
+</div>
+<div className="formSection">
+    <label htmlFor="questDescription">Quest description</label>
+    <textarea name="questDescription" id="questDescription" value={description} onChange={(e)=> setDescription(e.target.value)} placeholder="I am looking for strong warriors to.."></textarea>
+</div>
+<div className="formSection">
+    <label htmlFor="questStatus">Quest status</label>
+    <select id="queststatus" name="questStatus" value={status ?? ""} onChange={(e)=> {
+      const val = e.target.value
+      if (val === "completed" || val === "in_progress"|| val === "not_started"){
+        setStatus(val)
+      }else{
+        setStatus(null)
+      }
+    }}> 
+      <option value="completed">Completed</option>
+      <option value="in_progress">In progress</option>
+      <option value="not_started">Not started</option>
+    </select>
+</div>
+<div className="formSection">
+    <label htmlFor="questdifficultly">Quest difficulty</label>
+    <select id="questdifficultly" name="questdifficultly" value={difficultly ?? ""} onChange={(e)=> {
+      const val = e.target.value
+      if (val === "low" || val === "medium"|| val === "high"){
+        setDifficultly(val)
+      }else{
+        setDifficultly(null)
+      }
+    }}> 
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+</div>
+    <button type="submit">Submit</button>
+    </form>
     </>
     
   )

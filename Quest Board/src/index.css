@@ -1,2 +1,19 @@
+html {
+  font-size: 62.5%; 
+}
 
+body {
+  font-size: 1.6rem;
+  padding: 0.5em;
+}
+
+.questContainer{
+    display: flex;
+    gap: 1rem;
+}
+
+.quest{
+    border: 1px solid black;
+    padding: 0 1em;
+}
 
