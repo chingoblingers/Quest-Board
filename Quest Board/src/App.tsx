@@ -2,15 +2,15 @@ import {useEffect, useState} from "react"
 import {supabase}from "./lib/supabaseClient"
 
 type QuestStatus = "completed" | "in_progress" | "not_started"
-type Difficultly = "low" | "medium" | 'high'
-type Quest = {id: string, title:string, user_id: string, description: string | null, status: QuestStatus | null, difficultly: Difficultly | null}
+type Difficulty = "low" | "medium" | 'high'
+type Quest = {id: string, title:string, user_id: string, description: string | null, status: QuestStatus | null, difficulty: Difficulty | null}
 
 export default function App() {
 const [questsData, setQuestsData] = useState<Quest[]>([])
 const [title, setTitle] = useState('')
 const [description, setDescription] = useState('')
-const [status, setStatus] = useState<QuestStatus | null>("not_started")
-const [difficultly, setDifficultly] = useState<Difficultly | null>('low')
+const [status, setStatus] = useState<QuestStatus>("not_started")
+const [difficulty, setDifficulty] = useState<Difficulty>('low')
 
 useEffect(()=>{
   fetchQuests()
@@ -38,7 +38,7 @@ async function addQuest(){
     title: "Insert Quest Test",
     description: "testing inserting a quest to the table",
     status: "not started",
-    difficultly: "low",
+    difficulty: "low",
     user_id: "ed9e0f12-a41e-4fc6-9d10-e1c97c2d0f75"
   }])
   
@@ -59,7 +59,7 @@ const mappedData = questsData.map(quest => {
   <h2>{quest.title}</h2>
   <p>{quest.description}</p>
   <p>{quest.status}</p>
-  <p>{quest.difficultly}</p>
+  <p>{quest.difficulty}</p>
   </div>
 })
 
@@ -82,12 +82,10 @@ console.log(title)
 </div>
 <div className="formSection">
     <label htmlFor="questStatus">Quest status</label>
-    <select id="queststatus" name="questStatus" value={status ?? ""} onChange={(e)=> {
+    <select id="queststatus" name="questStatus" value={status} onChange={(e)=> {
       const val = e.target.value
       if (val === "completed" || val === "in_progress"|| val === "not_started"){
         setStatus(val)
-      }else{
-        setStatus(null)
       }
     }}> 
       <option value="completed">Completed</option>
@@ -96,13 +94,11 @@ console.log(title)
     </select>
 </div>
 <div className="formSection">
-    <label htmlFor="questdifficultly">Quest difficulty</label>
-    <select id="questdifficultly" name="questdifficultly" value={difficultly ?? ""} onChange={(e)=> {
+    <label htmlFor="questdifficulty">Quest difficulty</label>
+    <select id="questdifficulty" name="questdifficulty" value={difficulty} onChange={(e)=> {
       const val = e.target.value
       if (val === "low" || val === "medium"|| val === "high"){
-        setDifficultly(val)
-      }else{
-        setDifficultly(null)
+        setDifficulty(val)
       }
     }}> 
       <option value="low">Low</option>
