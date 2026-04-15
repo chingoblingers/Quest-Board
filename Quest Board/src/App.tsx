@@ -21,10 +21,9 @@ async function fetchQuests(){
   const {data, error} = await supabase.from('quests').select('*')
   if (error){
     throw error
-  }else{
-    setQuestsData(data)
-    console.log(data)
   }
+    setQuestsData(data)
+    
   }catch(error){
     console.error(`unable to fetch quests due to Error: ${error}`)
   }
@@ -32,7 +31,6 @@ async function fetchQuests(){
 }
 
 async function addQuest(){
-  try{
 
     const {error} = await supabase.from("quests").insert([{
     title: title,
@@ -48,19 +46,20 @@ async function addQuest(){
 
   await fetchQuests()
 
-  }catch (error){
-    console.error(`Could not create quest due to error ${error}`)
-  }
-
 }
 
 async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
   e.preventDefault()
-  await addQuest()
-  setTitle('')
-  setDescription('')
-  setStatus("not_started")
-  setDifficulty('low')
+  try{
+    await addQuest()
+    setTitle('')
+    setDescription('')
+    setStatus("not_started")
+    setDifficulty('low')
+  } catch (error) {
+    console.error(`Could not create quest due to error ${error}`)
+  }
+
 }
 
 const mappedData = questsData.map(quest => {
