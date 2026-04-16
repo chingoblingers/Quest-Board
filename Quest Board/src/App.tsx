@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react"
 import {supabase}from "./lib/supabaseClient"
+import { type Session } from '@supabase/supabase-js'
 
 type QuestStatus = "completed" | "in_progress" | "not_started"
 type Difficulty = "low" | "medium" | 'high'
@@ -11,10 +12,33 @@ const [title, setTitle] = useState('')
 const [description, setDescription] = useState('')
 const [status, setStatus] = useState<QuestStatus>("not_started")
 const [difficulty, setDifficulty] = useState<Difficulty>('low')
+const [loading, setLoading] = useState(true)
+const [session, setSession] = useState<Session | null>(null)
 
 useEffect(()=>{
+  getSession()
   fetchQuests()
+  
 },[])
+
+async function getSession(){
+  try{
+    const {data, error} = await supabase.auth.getSession()
+    if (error){
+      throw error
+    }
+    setSession(data.session)
+  }catch(error){
+    console.error(`unable to get session due to error ${error}`)
+    
+  }finally{
+    setLoading(false)
+  }
+
+}
+
+
+
 
 async function fetchQuests(){
   try{
@@ -113,6 +137,9 @@ const mappedData = questsData.map(quest => {
 </div>
     <button type="submit">Create Quest</button>
     </form>
+<p>
+  {loading ? "Checking session..." : session ? session.user.id : "No session"}
+</p>
     </>
     
   )
