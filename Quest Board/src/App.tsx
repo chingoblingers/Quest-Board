@@ -14,6 +14,8 @@ const [status, setStatus] = useState<QuestStatus>("not_started")
 const [difficulty, setDifficulty] = useState<Difficulty>('low')
 const [loading, setLoading] = useState(true)
 const [session, setSession] = useState<Session | null>(null)
+const [email, setEmail] = useState('')
+const [password, setPassword] = useState('')
 
 useEffect(()=>{
   getSession()
@@ -76,6 +78,25 @@ async function addQuest(){
 
   await fetchQuests()
 
+}
+
+async function handleLoginSubmit(e: React.FormEvent<HTMLFormElement>){
+  e.preventDefault()
+  try{
+    const {error} = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    })
+
+    if (error){
+      throw error
+    }
+    await getSession()
+  }catch(error){
+    console.error(`Login failed due to error ${error}`)
+  }finally{
+    setPassword('')
+  }
 }
 
 async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
@@ -147,14 +168,14 @@ const mappedData = questsData.map(quest => {
   {loading ? "Checking session..." : session ? session.user.id : "No session"}
 </p>
 
-<form>
+<form onSubmit={handleLoginSubmit}>
 <div>
 <label htmlFor="email">Email</label>
-  <input type="email" name="email" placeholder="Email"/>
+  <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
 </div>
 <div>
 <label htmlFor="password">Password</label>
-  <input type="password" name="password" placeholder="Password"/>
+  <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
 </div>
 
   <button type="submit">Login</button>  
