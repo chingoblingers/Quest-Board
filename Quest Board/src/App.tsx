@@ -56,12 +56,18 @@ async function fetchQuests(){
 
 async function addQuest(){
 
+  const userId = session?.user?.id
+
+  if (!userId){
+    throw new Error('No user session found. Please log in to create a quest.')
+  }
+
     const {error} = await supabase.from("quests").insert([{
     title: title,
     description: description,
     status: status,
     difficulty: difficulty,
-    user_id: "ed9e0f12-a41e-4fc6-9d10-e1c97c2d0f75"
+    user_id: userId
   }])
   
   if(error){
@@ -140,7 +146,20 @@ const mappedData = questsData.map(quest => {
 <p>
   {loading ? "Checking session..." : session ? session.user.id : "No session"}
 </p>
-    </>
+
+<form>
+<div>
+<label htmlFor="email">Email</label>
+  <input type="email" name="email" placeholder="Email"/>
+</div>
+<div>
+<label htmlFor="password">Password</label>
+  <input type="password" name="password" placeholder="Password"/>
+</div>
+
+  <button type="submit">Login</button>  
+</form>
+ </>
     
   )
 }
