@@ -20,6 +20,14 @@ const [password, setPassword] = useState('')
 useEffect(()=>{
   getSession()
   fetchQuests()
+
+  const subscribe = supabase.auth.onAuthStateChange((event, session) => {
+    setSession(session)
+  })
+
+  return () => {
+    subscribe.data.subscription.unsubscribe()
+  }
   
 },[])
 
@@ -91,7 +99,6 @@ async function handleLoginSubmit(e: React.FormEvent<HTMLFormElement>){
     if (error){
       throw error
     }
-    await getSession()
   }catch(error){
     console.error(`Login failed due to error ${error}`)
   }finally{
