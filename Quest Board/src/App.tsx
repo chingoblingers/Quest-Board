@@ -19,7 +19,6 @@ const [password, setPassword] = useState('')
 
 useEffect(()=>{
   getSession()
-  fetchQuests()
 
   const subscribe = supabase.auth.onAuthStateChange((event, session) => {
     setSession(session)
@@ -30,6 +29,16 @@ useEffect(()=>{
   }
   
 },[])
+
+useEffect(()=>{
+
+    if (!session){
+      setQuestsData([])
+      return
+    }
+
+  fetchQuests()
+},[session])
 
 async function getSession(){
   try{
