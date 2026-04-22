@@ -1,10 +1,12 @@
 import {useEffect, useState} from "react"
 import {supabase}from "./lib/supabaseClient"
 import { type Session } from '@supabase/supabase-js'
+import QuestCard from "./components/questCard"
 
 type QuestStatus = "completed" | "in_progress" | "not_started"
 type Difficulty = "low" | "medium" | 'high'
 type Quest = {id: string, title:string, user_id: string, description: string | null, status: QuestStatus | null, difficulty: Difficulty | null}
+export type QuestCardProps = Pick<Quest, "id" | "title" | "description" | "status" | "difficulty">
 
 export default function App() {
 const [questsData, setQuestsData] = useState<Quest[]>([])
@@ -129,14 +131,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
 
 }
 
-const mappedData = questsData.map(quest => {
-  return <div key={quest.id} className="quest">
-  <h2>{quest.title}</h2>
-  <p>{quest.description}</p>
-  <p>{quest.status}</p>
-  <p>{quest.difficulty}</p>
-  </div>
-})
+const mappedData = questsData.map(quest => <QuestCard key={quest.id} {...quest}/>)
 
   return (
     <>
