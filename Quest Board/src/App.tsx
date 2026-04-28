@@ -6,7 +6,7 @@ import QuestCard from "./components/questCard"
 type QuestStatus = "completed" | "in_progress" | "not_started"
 type Difficulty = "low" | "medium" | 'high'
 type Quest = {id: string, title:string, user_id: string, description: string | null, status: QuestStatus | null, difficulty: Difficulty | null}
-export type QuestCardProps = Pick<Quest, "id" | "title" | "description" | "status" | "difficulty">
+export type QuestCardProps = Pick<Quest, "id" | "title" | "description" | "status" | "difficulty"> & { onDelete: (id: string) => void}
 
 export default function App() {
 const [questsData, setQuestsData] = useState<Quest[]>([])
@@ -131,7 +131,24 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
 
 }
 
-const mappedData = questsData.map(quest => <QuestCard key={quest.id} {...quest}/>)
+async function handleDelete(id: string) {
+  try {
+    const { error } = await supabase
+      .from("quests")
+      .delete()
+      .eq("id", id)
+
+    if (error) {
+      throw error
+    }
+
+    await fetchQuests()
+  } catch (error) {
+    console.error(`unable to delete due to following error: ${error}`)
+  }
+}
+
+const mappedData = questsData.map(quest => <QuestCard key={quest.id} {...quest} onDelete={handleDelete}/>)
 
   return (
     <>
