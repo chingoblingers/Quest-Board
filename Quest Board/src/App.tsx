@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react"
 import {supabase}from "./lib/supabaseClient"
 import { type Session } from '@supabase/supabase-js'
-import QuestCard from "./components/questCard"
+import QuestCard from "./components/QuestCard"
 
 type QuestStatus = "completed" | "in_progress" | "not_started"
 type Difficulty = "low" | "medium" | 'high'
@@ -132,6 +132,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
 }
 
 async function handleDelete(id: string) {
+  console.log("deleting quest" , id)
   try {
     const { error } = await supabase
       .from("quests")
