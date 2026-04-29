@@ -3,12 +3,27 @@ import {supabase}from "./lib/supabaseClient"
 import { type Session } from '@supabase/supabase-js'
 import QuestCard from "./components/QuestCard"
 import LoginForm from "./components/LoginForm"
+import SubmitQuestForm from "./components/SubmitQuestForm"
 
 type QuestStatus = "completed" | "in_progress" | "not_started"
 type Difficulty = "low" | "medium" | 'high'
 type Quest = {id: string, title:string, user_id: string, description: string | null, status: QuestStatus | null, difficulty: Difficulty | null}
 export type QuestCardProps = Pick<Quest, "id" | "title" | "description" | "status" | "difficulty"> & { onDelete: (id: string) => void}
-export type LoginFormProps = {email: string, password: string, setEmail: (value: string) => void, setPassword: (value: string)=> void, handleLoginSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>}
+export type LoginFormProps = {
+  email: string, 
+  password: string, setEmail: (value: string) => void, 
+  setPassword: (value: string)=> void, 
+  handleLoginSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>}
+export type SubmitQuestFormProps = {
+  title:string, 
+  setTitle: (value:string)=> void, 
+  description:string, 
+  setDescription: (value: string)=> void, 
+  status: QuestStatus, 
+  setStatus: (value: QuestStatus)=> void, 
+  difficulty:Difficulty, 
+  setDifficulty: (value:Difficulty)=> void, 
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>}  
 
 export default function App() {
 const [questsData, setQuestsData] = useState<Quest[]>([])
@@ -170,43 +185,16 @@ const mappedData = questsData.map(quest => <QuestCard key={quest.id} {...quest} 
     <div className="questContainer"> 
     {mappedData}
     </div>
-    <form className="customQuestForm" onSubmit={handleSubmit}>
-<div className="formSection">  
-    <label htmlFor="questTitle">Quest title</label>  
-    <input type="text" onChange={(e)=> setTitle(e.target.value)} value={title} name="questTitle" placeholder="Slay a dragon..." id="questTitle" required/>
-</div>
-<div className="formSection">
-    <label htmlFor="questDescription">Quest description</label>
-    <textarea name="questDescription" id="questDescription" value={description} onChange={(e)=> setDescription(e.target.value)} placeholder="I am looking for strong warriors to.."></textarea>
-</div>
-<div className="formSection">
-    <label htmlFor="questStatus">Quest status</label>
-    <select id="questStatus" name="questStatus" value={status} onChange={(e)=> {
-      const val = e.target.value
-      if (val === "completed" || val === "in_progress"|| val === "not_started"){
-        setStatus(val)
-      }
-    }}> 
-      <option value="completed">Completed</option>
-      <option value="in_progress">In progress</option>
-      <option value="not_started">Not started</option>
-    </select>
-</div>
-<div className="formSection">
-    <label htmlFor="questDifficulty">Quest difficulty</label>
-    <select id="questDifficulty" name="questDifficulty" value={difficulty} onChange={(e)=> {
-      const val = e.target.value
-      if (val === "low" || val === "medium"|| val === "high"){
-        setDifficulty(val)
-      }
-    }}> 
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
-</div>
-    <button type="submit">Create Quest</button>
-    </form>
+<SubmitQuestForm title={title} 
+setTitle={setTitle} 
+description={description} 
+setDescription={setDescription} 
+status={status} 
+setStatus={setStatus} 
+difficulty={difficulty} 
+setDifficulty={setDifficulty}
+handleSubmit={handleSubmit}
+/>
 <p>
   {loading ? "Checking session..." : session ? session.user.id : "No session"}
 </p>
