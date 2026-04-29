@@ -35,6 +35,7 @@ const [loading, setLoading] = useState(true)
 const [session, setSession] = useState<Session | null>(null)
 const [email, setEmail] = useState('')
 const [password, setPassword] = useState('')
+const [error, setError] = useState<string | null>(null)
 
 useEffect(()=>{
   getSession()
@@ -119,6 +120,7 @@ async function addQuest(){
 async function handleLoginSubmit(e: React.FormEvent<HTMLFormElement>){
   e.preventDefault()
   try{
+    setError(null)
     const {error} = await supabase.auth.signInWithPassword({
       email: email,
       password: password
@@ -128,6 +130,7 @@ async function handleLoginSubmit(e: React.FormEvent<HTMLFormElement>){
       throw error
     }
   }catch(error){
+    setError("Login failed. Please check your email and password.")
     console.error(`Login failed due to error ${error}`)
   }finally{
     setPassword('')
