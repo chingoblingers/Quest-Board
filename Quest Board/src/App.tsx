@@ -154,6 +154,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
 async function handleDelete(id: string) {
   console.log("deleting quest" , id)
   try {
+    setError(null)
     const { error } = await supabase
       .from("quests")
       .delete()
@@ -165,18 +166,21 @@ async function handleDelete(id: string) {
 
     await fetchQuests()
   } catch (error) {
+    setError("Delete failed. Please check if you have permissions")
     console.error(`unable to delete due to following error: ${error}`)
   }
 }
 
 async function handleSignOut(){
   try {
+    setError(null)
    const {error} = await supabase.auth.signOut()
    
    if (error){
     throw error
    }
   } catch (error) {
+    setError("Failed to sign out. Please try again")
     console.error(`failed to sign out due to ${error}`)
   }
 }
