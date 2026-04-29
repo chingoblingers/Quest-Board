@@ -149,6 +149,18 @@ async function handleDelete(id: string) {
   }
 }
 
+async function handleSignOut(){
+  try {
+   const {error} = await supabase.auth.signOut()
+   
+   if (error){
+    throw error
+   }
+  } catch (error) {
+    console.error(`failed to sign out due to ${error}`)
+  }
+}
+
 const mappedData = questsData.map(quest => <QuestCard key={quest.id} {...quest} onDelete={handleDelete}/>)
 
   return (
@@ -207,7 +219,8 @@ const mappedData = questsData.map(quest => <QuestCard key={quest.id} {...quest} 
   <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
 </div>
 
-  <button type="submit">Login</button>  
+  <button type="submit">Login</button>
+  <button onClick={handleSignOut}>Logout</button>  
 </form>
  </>
     
