@@ -1,5 +1,5 @@
-
-export default function LoginForm({}){
+import { type LoginFormProps } from "../App"
+export default function LoginForm({email, password, setEmail, setPassword, handleLoginSubmit}: LoginFormProps){
     return(
 <form onSubmit={handleLoginSubmit}>
 <div>
@@ -11,8 +11,7 @@ export default function LoginForm({}){
   <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
 </div>
 
-  <button type="submit">Login</button>
-  <button onClick={handleSignOut}>Logout</button>  
+  <button type="submit">Login</button>  
 </form>
     )
 }

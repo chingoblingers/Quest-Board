@@ -2,11 +2,13 @@ import {useEffect, useState} from "react"
 import {supabase}from "./lib/supabaseClient"
 import { type Session } from '@supabase/supabase-js'
 import QuestCard from "./components/QuestCard"
+import LoginForm from "./components/LoginForm"
 
 type QuestStatus = "completed" | "in_progress" | "not_started"
 type Difficulty = "low" | "medium" | 'high'
 type Quest = {id: string, title:string, user_id: string, description: string | null, status: QuestStatus | null, difficulty: Difficulty | null}
 export type QuestCardProps = Pick<Quest, "id" | "title" | "description" | "status" | "difficulty"> & { onDelete: (id: string) => void}
+export type LoginFormProps = {email: string, password: string, setEmail: (value: string) => void, setPassword: (value: string)=> void, handleLoginSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>}
 
 export default function App() {
 const [questsData, setQuestsData] = useState<Quest[]>([])
@@ -208,6 +210,8 @@ const mappedData = questsData.map(quest => <QuestCard key={quest.id} {...quest} 
 <p>
   {loading ? "Checking session..." : session ? session.user.id : "No session"}
 </p>
+<LoginForm email={email} password={password} setPassword={setPassword} setEmail={setEmail} handleLoginSubmit={handleLoginSubmit}/>
+<button onClick={handleSignOut}>Logout</button>
  </>
     
   )
