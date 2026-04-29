@@ -182,24 +182,30 @@ const mappedData = questsData.map(quest => <QuestCard key={quest.id} {...quest} 
 
   return (
     <>
-    <div className="questContainer"> 
-    {mappedData}
+    {loading?
+    <p>Checking for Session...</p>
+    : session ? <div>
+      <div className="questContainer"> 
+      {mappedData}
+      </div>
+      <SubmitQuestForm title={title} 
+      setTitle={setTitle} 
+      description={description} 
+      setDescription={setDescription} 
+      status={status} 
+      setStatus={setStatus} 
+      difficulty={difficulty} 
+      setDifficulty={setDifficulty}
+      handleSubmit={handleSubmit}
+      />
+      <button onClick={handleSignOut}>Logout</button>
     </div>
-<SubmitQuestForm title={title} 
-setTitle={setTitle} 
-description={description} 
-setDescription={setDescription} 
-status={status} 
-setStatus={setStatus} 
-difficulty={difficulty} 
-setDifficulty={setDifficulty}
-handleSubmit={handleSubmit}
-/>
+    : <LoginForm email={email} password={password} setPassword={setPassword} setEmail={setEmail} handleLoginSubmit={handleLoginSubmit}/>
+    }
+
 <p>
   {loading ? "Checking session..." : session ? session.user.id : "No session"}
 </p>
-<LoginForm email={email} password={password} setPassword={setPassword} setEmail={setEmail} handleLoginSubmit={handleLoginSubmit}/>
-<button onClick={handleSignOut}>Logout</button>
  </>
     
   )
