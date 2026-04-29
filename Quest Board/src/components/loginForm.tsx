@@ -1,4 +1,4 @@
-import { type LoginFormProps } from "../App"
+import { type LoginFormProps } from "../types"
 export default function LoginForm({email, password, setEmail, setPassword, handleLoginSubmit}: LoginFormProps){
     return(
 <form onSubmit={handleLoginSubmit}>

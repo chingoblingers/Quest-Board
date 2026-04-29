@@ -1,4 +1,4 @@
-import { type QuestCardProps } from "./../App"
+import { type QuestCardProps } from "./../types"
 
 export default function QuestCard({ id,title, description, status, difficulty, onDelete }: QuestCardProps) {
   return (

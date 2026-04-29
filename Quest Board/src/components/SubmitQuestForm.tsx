@@ -1,5 +1,5 @@
 
-import { type SubmitQuestFormProps } from "./../App"
+import { type SubmitQuestFormProps } from "./../types"
 export default function SubmitQuestForm({title, setTitle, description, setDescription, status, setStatus, difficulty, setDifficulty, handleSubmit}: SubmitQuestFormProps){
     return(
         <form className="customQuestForm" onSubmit={handleSubmit}>
