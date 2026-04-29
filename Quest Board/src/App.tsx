@@ -220,6 +220,8 @@ const mappedData = questsData.map(quest => <QuestCard key={quest.id} {...quest} 
     handleLoginSubmit={handleLoginSubmit}
   />
 )}
+
+{error ? <p>{error}</p> : null}
  </>
     
   )
